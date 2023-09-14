@@ -716,6 +716,89 @@ app.delete('/api/scores/:id', async (req, res) => {
 
 
 
+
+
+
+// for mma
+
+const scoreSchemamma = new mongoose.Schema({
+  playerName: String,
+  playerRound: Number,
+  stPrediction1: Number,
+  stPrediction2: Number,
+  kiPrediction1: Number,
+  kiPrediction2: Number,
+  knPrediction1: Number,
+  knPrediction2: Number,
+  elPrediction1: Number,
+  elPrediction2: Number,
+  spPrediction1: Number,
+  spPrediction2: Number,
+  rwPrediction1: Number,
+  rwPrediction2: Number,
+});
+
+const ScoreMma = mongoose.model('ScoreMma', scoreSchemamma);
+
+// API endpoint to create MMA scores
+app.post('/api/mma/scores', async (req, res) => {
+  try {
+    const {
+      playerName,
+      playerRound,
+      stPrediction1,
+      stPrediction2,
+      kiPrediction1,
+      kiPrediction2,
+      knPrediction1,
+      knPrediction2,
+      elPrediction1,
+      elPrediction2,
+      spPrediction1,
+      spPrediction2,
+      rwPrediction1,
+      rwPrediction2,
+    } = req.body;
+
+    const scoreMma = new ScoreMma({
+      playerName,
+      playerRound,
+      stPrediction1,
+      stPrediction2,
+      kiPrediction1,
+      kiPrediction2,
+      knPrediction1,
+      knPrediction2,
+      elPrediction1,
+      elPrediction2,
+      spPrediction1,
+      spPrediction2,
+      rwPrediction1,
+      rwPrediction2,
+    });
+
+    await scoreMma.save();
+    res.status(201).send(scoreMma);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// API endpoint to retrieve MMA scores
+app.get('/api/mma/scores', async (req, res) => {
+  try {
+    const scoresMma = await ScoreMma.find();
+    res.send(scoresMma);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+// for mma ends here
+
+
+
 // Define the schema for round scores
 const roundScoreSchema = new mongoose.Schema({
   HP: Number,
