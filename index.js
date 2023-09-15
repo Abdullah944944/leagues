@@ -757,6 +757,23 @@ const scoreSchemamma = new mongoose.Schema({
 
 const ScoreMma = mongoose.model('ScoreMma', scoreSchemamma);
 
+app.delete('/api/mma/scores/:playerName', async (req, res) => {
+  const playerName = req.params.playerName;
+
+  try {
+    const result = await ScoreMma.deleteMany({ playerName });
+
+    if (result.deletedCount > 0) {
+      res.status(200).json({ message: `Deleted ${result.deletedCount} records for ${playerName}` });
+    } else {
+      res.status(404).json({ message: `No records found for ${playerName}` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // API endpoint to create MMA scores
 app.post('/api/mma/scores', async (req, res) => {
   try {
