@@ -680,6 +680,27 @@ app.post('/api/scores', async (req, res) => {
     res.status(400).send(error);
   }
 });
+app.delete('/api/scores/:playerName', async (req, res) => {
+  const playerName = req.params.playerName;
+
+  try {
+    const result = await Score.deleteMany({ playerName });
+
+    if (result.deletedCount > 0) {
+      res.status(200).json({ message: `Deleted ${result.deletedCount} records for ${playerName}` });
+    } else {
+      res.status(404).json({ message: `No records found for ${playerName}` });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
 
 // API endpoint to retrieve scores
 app.get('/api/scores', async (req, res) => {
