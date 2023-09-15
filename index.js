@@ -697,10 +697,6 @@ app.delete('/api/scores/:playerName', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
 
 // API endpoint to retrieve scores
 app.get('/api/scores', async (req, res) => {
