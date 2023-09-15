@@ -623,55 +623,36 @@ app.delete('/deleteObjectId/:id', async (req, res) => {
 });
 
 
-
-// Define Schema
+// Update your schema to handle an array of predictions
 const scoreSchema = new mongoose.Schema({
   playerName: String,
-  playerRound: Number,
-  hpPrediction1: Number,
-  hpPrediction2: Number,
-  bpPrediction1: Number,
-  bpPrediction2: Number,
-  tpPrediction1: Number,
-  tpPrediction2: Number,
-  rwPrediction1: Number,
-  rwPrediction2: Number,
-  koPrediction1: Number,
-  koPrediction2: Number,
+  predictions: [
+    {
+      playerRound: Number,
+      hpPrediction1: Number,
+      hpPrediction2: Number,
+      bpPrediction1: Number,
+      bpPrediction2: Number,
+      tpPrediction1: Number,
+      tpPrediction2: Number,
+      rwPrediction1: Number,
+      rwPrediction2: Number,
+      koPrediction1: Number,
+      koPrediction2: Number,
+    },
+  ],
 });
 
 const Score = mongoose.model('Score', scoreSchema);
 
 app.post('/api/scores', async (req, res) => {
   try {
-    const {
-      playerName,
-      playerRound,
-      hpPrediction1,
-      bpPrediction1,
-      hpPrediction2,
-      bpPrediction2,
-      tpPrediction1,
-      tpPrediction2,
-      rwPrediction1,
-      rwPrediction2,
-      koPrediction1,
-      koPrediction2,
-    } = req.body;
+    const { playerName, predictions } = req.body;
 
+    // Create a new Score document with the player's name and predictions
     const score = new Score({
       playerName,
-      playerRound,
-      hpPrediction1,
-      bpPrediction1,
-      hpPrediction2,
-      bpPrediction2,
-      tpPrediction1,
-      tpPrediction2,
-      rwPrediction1,
-      rwPrediction2,
-      koPrediction1,
-      koPrediction2,
+      predictions,
     });
 
     await score.save();
@@ -680,6 +661,7 @@ app.post('/api/scores', async (req, res) => {
     res.status(400).send(error);
   }
 });
+
 
 // API endpoint to retrieve scores
 app.get('/api/scores', async (req, res) => {
